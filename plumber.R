@@ -5,13 +5,25 @@ library(plumber)
 library(soilDB)
 library(sf)
 library(geojsonsf)
-library(rvest)
+# library(rvest)
 library(xml2)
 library(jsonlite)
 
 #* @apiTitle soilDB fetchSDA_spatial API
 #* @apiDescription An API wrapper for the soilDB::fetchSDA_spatial function to query spatial data from the Soil Data Access (SDA) service.
 #* Powered by soilDB
+
+#* Health check / base endpoint
+#* @tag "Health Check"
+#* @description Confirms that the API is running and returns the current server time.
+#* @get /
+function() {
+  list(
+    status = "soilDB fetchSDA_spatial API is running!",
+    timestamp = Sys.time(),
+    message = "Welcome! See the /__docs__/ endpoint for API documentation."
+  )
+}
 
 #* Get Spatial Data from Soil Data Access
 #* @description Wraps the `soilDB::fetchSDA_spatial` function. Fetches spatial data based on various soil identifiers.
@@ -33,7 +45,7 @@ function(
     method = 'feature',
     geom.src = 'mupolygon',
     db = 'SSURGO',
-    add.fields = NULL,
+    add.fields = character(),
     chunk.size = 10,
     format = "geojson"
   ) {
@@ -46,7 +58,7 @@ function(
 
   x_vec <- strsplit(URLdecode(x), ",")[[1]]
   add.fields_vec <- NULL
-  if (!is.null(add.fields)) {
+  if (length(add.fields) > 0) {
     add.fields_vec <- strsplit(URLdecode(add.fields), ",")[[1]]
   }
 
