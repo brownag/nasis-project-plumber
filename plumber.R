@@ -4,6 +4,7 @@
 library(plumber)
 library(soilDB)
 library(sf)
+library(geojsonsf)
 
 #* @apiTitle soilDB fetchSDA_spatial API
 #* @apiDescription An API wrapper for the soilDB::fetchSDA_spatial function to query spatial data from the Soil Data Access (SDA) service.
